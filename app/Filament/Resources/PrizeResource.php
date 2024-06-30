@@ -49,6 +49,9 @@ class PrizeResource extends Resource
                     ->default(0),
                 Forms\Components\TextInput::make('counts')
                     ->numeric(),
+                Forms\Components\TextInput::make('device')
+                    ->maxLength(255),
+                    
             ]);
     }
 
@@ -68,6 +71,8 @@ class PrizeResource extends Resource
                 Tables\Columns\TextColumn::make('phone')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('wip')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('device')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('agree')
                     ->numeric()

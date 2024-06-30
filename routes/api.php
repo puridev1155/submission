@@ -8,4 +8,5 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+//Prizes 명단등록
 Route::apiResource('prizes', PrizeController::class);
