@@ -23,7 +23,32 @@ class PrizeResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('vol')
+                    ->numeric(),
+                Forms\Components\TextInput::make('award')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('name')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('email')
+                    ->email()
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('phone')
+                    ->tel()
+                    ->required()
+                    ->maxLength(13),
+                Forms\Components\TextInput::make('wip')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('agree')
+                    ->required()
+                    ->numeric()
+                    ->default(1),
+                Forms\Components\TextInput::make('success')
+                    ->required()
+                    ->numeric()
+                    ->default(0),
+                Forms\Components\TextInput::make('counts')
+                    ->numeric(),
             ]);
     }
 
@@ -31,7 +56,36 @@ class PrizeResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('vol')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('award')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('email')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('phone')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('wip')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('agree')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('success')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('counts')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
