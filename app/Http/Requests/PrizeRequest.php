@@ -24,12 +24,12 @@ class PrizeRequest extends FormRequest
         return [
             'vol' => 'required',
             'award' => 'required',
-            'name' => 'required',
-            'email' =>'required|unique:prizes',
-            'phone' => 'required|unique:prizes',
+            'name' => 'nullable',
+            'email' =>'nullable',
+            'phone' => 'nullable',
             'counts' => 'nullable',
             'success' => 'nullable',
-            'agree' => 'required',
+            'agree' => 'nullable',
         ];
     }
 
