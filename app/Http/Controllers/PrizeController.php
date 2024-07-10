@@ -15,6 +15,7 @@ class PrizeController extends Controller
      */
     public function store(Request $request)
     {
+        Log::info('check');
         $validated['vol'] = $request->vol;
         $validated['device'] =  $request->userAgent();
         $validated['wip'] = $request->ip();
