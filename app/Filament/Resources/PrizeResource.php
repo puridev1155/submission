@@ -10,6 +10,8 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -68,10 +70,16 @@ class PrizeResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('id')
+                ->label('ID')
+                ->numeric()
+                ->sortable(),
                 Tables\Columns\TextColumn::make('vol')
+                ->label('볼륨')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('award')
+                    ->label('상품')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
                     ->label('이름')
@@ -82,46 +90,54 @@ class PrizeResource extends Resource
                 Tables\Columns\TextColumn::make('phone')
                     ->label('연락처')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('wip')
-                    ->label('IP주소')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('device')   
-                    ->label('기기종류')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('agree')
-                    ->label('약관동의')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('success')
-                    ->label('성공여부')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('counts')
-                    ->label('등록수')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('등록일')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->label('수정일')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('wip')
+                    ->label('IP주소')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('device')   
+                    ->label('기기종류')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true), 
+                Tables\Columns\TextColumn::make('counts')
+                    ->label('등록수')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('agree')
+                ->label('동의')
+                ->formatStateUsing(function ($state) {
+                    if (is_null($state)) {
+                        return '미동의';
+                    }
+                    return $state === '1' ? '없음' : '체크';
+                })
+                ->icon(function ($state) {
+                    return $state === '1' ? 'heroicon-o-x-circle' : 'heroicon-o-check-circle';
+                })
+                ->color(function ($state) {
+                    return $state === '1' ? 'danger' : 'success';
+                }),
             ])
             ->filters([
-                //
+                Filter::make('스타벅스')
+                    ->label('스타벅스')
+                    ->query(fn ($query) => $query->where('award', 'like', '%스타벅스%')),
+                Filter::make('꽝')
+                    ->label('꽝')
+                    ->query(fn ($query) => $query->where('award', 'like', '%꽝%')),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function getRelations(): array
@@ -135,8 +151,6 @@ class PrizeResource extends Resource
     {
         return [
             'index' => Pages\ListPrizes::route('/'),
-            'create' => Pages\CreatePrize::route('/create'),
-            'edit' => Pages\EditPrize::route('/{record}/edit'),
         ];
     }
 }
